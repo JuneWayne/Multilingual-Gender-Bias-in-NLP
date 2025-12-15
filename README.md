@@ -5,7 +5,9 @@ How NLP Models Exhibit Bias with Gender Embedded Contexts"**, evaluating gender 
 
 ## Overview
 
-This research project is a result of CS2501: Intro to Research by Prof. Morrison at UVA School of Engineering. The paper compares model behavior across languages with gendered third-person pronouns (English, Dutch) and languages with gender-neutral pronouns (Finnish, Turkish). By analyzing how toxicity and sentiment scores vary when the only difference is the gendered pronoun used, we can measure the extent of gender bias encoded in these models.
+This research project is an initiative from **CS2501: Intro to Research by Prof. Morrison** at UVA School of Engineering. The paper compares model behavior across languages with gendered third-person pronouns (English, Dutch) and languages with gender-neutral pronouns (Finnish, Turkish). By analyzing how toxicity and sentiment scores vary when the only difference is the gendered pronoun used, we can measure the extent of gender bias encoded in these models.
+
+### Contributing Authors: Ethan Cao, Jacquelyn Xu, Alex Schwartz 
 
 <p align="center">
   <img src="misc/Paper-first-page.png" alt="Paper">
