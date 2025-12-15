@@ -1,7 +1,7 @@
 # Multilingual Gender Bias in NLP
 
-This repository contains code for the paper **Gendered Versus Genderless Pronouns: An Empirical Study on
-How NLP Models Exhibit Bias with Gender Embedded Contexts**, evaluating gender bias in multilingual NLP models, specifically in toxicity detection and sentiment analysis systems.
+This repository contains code for the paper "**Gendered Versus Genderless Pronouns: An Empirical Study on
+How NLP Models Exhibit Bias with Gender Embedded Contexts**", evaluating gender bias in multilingual NLP models, specifically in toxicity detection and sentiment analysis systems.
 
 ## Overview
 
