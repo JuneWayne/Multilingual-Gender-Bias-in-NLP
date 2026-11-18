@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gendered Versus Genderless Pronouns</title>
+<meta name="description" content="An empirical study of how multilingual NLP models show gender bias in toxicity detection and sentiment analysis, comparing English and Dutch with Finnish and Turkish.">
+<style>
+  :root { --bg: #fbfbfa; --ink: #17191c; --mute: #5f646c; --line: #d6d9dd; --accent: #2346d6; --stage: #e9eaec; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121315; --ink: #eceef0; --mute: #9399a1; --line: #3b3f45; --accent: #8ea2ff; --stage: #1b1d20; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { max-width: 960px; margin: 0 auto; padding: 40px 16px 24px; }
+  h1 { margin: 0 0 10px; font-size: clamp(22px, 3.2vw, 30px); line-height: 1.25; }
+  .authors { margin: 0; font-weight: 600; }
+  .meta { margin: 2px 0 0; color: var(--mute); }
+  .summary { margin: 16px 0 0; max-width: 70ch; }
+  .links { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 16px; }
+  a { color: var(--accent); }
+  main { background: var(--stage); border-top: 1px solid var(--line); padding: 24px 16px 48px; }
+  #pages { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .page { position: relative; width: 100%; max-width: 900px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+  .page canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .msg { text-align: center; color: var(--mute); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Gendered Versus Genderless Pronouns: An Empirical Study on How NLP Models Exhibit Bias with Gender Embedded Contexts</h1>
+  <p class="authors">Ethan Cao, Jacquelyn Xu, Alex Schwartz</p>
+  <p class="meta">University of Virginia · CS 2501 Introduction to Research, advised by Prof. Brianna Morrison · December 2025</p>
+  <p class="summary">We apply Perturbation Sensitivity Analysis to Reddit comments from the RtGender dataset to test whether toxicity and sentiment models label text differently in languages with gendered pronouns (English, Dutch) than in languages with only gender-neutral pronouns (Finnish, Turkish).</p>
+  <nav class="links" aria-label="Paper links">
+    <a href="paper.pdf" download="Gendered-Versus-Genderless-Pronouns.pdf">Download PDF</a>
+    <a href="https://github.com/JuneWayne/Multilingual-Gender-Bias-in-NLP/blob/main/Multilingual_NLP_Model_Bias_with_Gendered_Pronouns.ipynb">Notebook</a>
+    <a href="https://github.com/JuneWayne/Multilingual-Gender-Bias-in-NLP">Code</a>
+  </nav>
+</header>
+<main>
+  <div id="pages" aria-label="Paper"><p class="msg">Loading the paper…</p></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const box = document.getElementById('pages');
+const pages = [];
+
+async function draw(p) {
+  const w = p.el.clientWidth;
+  if (p.busy || Math.abs((p.drawnAt || 0) - w) < 40) return;
+  p.busy = true;
+  try {
+    const vp = p.page.getViewport({ scale: Math.min(4, w * (window.devicePixelRatio || 1) / p.page.getViewport({ scale: 1 }).width) });
+    const c = document.createElement('canvas');
+    c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+    await p.page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+    if (p.canvas) p.canvas.replaceWith(c); else p.el.append(c);
+    p.canvas = c; p.drawnAt = w;
+  } finally { p.busy = false; }
+}
+
+pdfjsLib.getDocument('paper.pdf').promise.then(async doc => {
+  box.replaceChildren();
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    const p = pages.find(p => p.el === e.target); p.visible = e.isIntersecting; if (p.visible) draw(p);
+  }), { rootMargin: '150% 0px' });
+  for (let n = 1; n <= doc.numPages; n++) {
+    const page = await doc.getPage(n), v = page.getViewport({ scale: 1 });
+    const el = document.createElement('div');
+    el.className = 'page'; el.id = 'page-' + n; el.setAttribute('aria-label', 'Page ' + n);
+    el.style.aspectRatio = v.width + ' / ' + v.height;
+    box.append(el); pages.push({ el, page }); io.observe(el);
+  }
+}).catch(() => { box.innerHTML = '<p class="msg">The paper could not load. Use Download PDF.</p>'; });
+
+let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => pages.forEach(p => p.visible && draw(p)), 150); });
+</script>
+</body>
+</html>
